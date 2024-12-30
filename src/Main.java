@@ -5,6 +5,9 @@ import modules.Task;
 
 import java.util.ArrayList;
 
+// YELLOW
+// Мелочь, но папки(пакеты) принято называть в единственном числе
+// то есть manager, model и тд
 public class Main{
     public static void main(String[] args) {
         TaskManager taskManager = new TaskManager();

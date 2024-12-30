@@ -23,6 +23,8 @@ public class Epic extends Task {
         boolean hasDone = false;
 
         for (SubTask subTask : subTasks) {
+            // YELLOW
+            // Не очень хорошо, что у блока switch нет секции default
             switch (subTask.getStatus()) {
                 case "NEW":
                     hasNew = true;
