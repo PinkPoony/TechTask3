@@ -1,4 +1,4 @@
-package modules;
+package module;
 
 import java.util.Objects;
 

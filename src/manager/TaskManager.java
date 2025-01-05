@@ -1,14 +1,14 @@
-package managers;
+package manager;
 
-import modules.Epic;
-import modules.SubTask;
-import modules.Task;
+import module.Epic;
+import module.SubTask;
+import module.Task;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-// RED
-// Отсутствует метод по получению всех сабтасков определенного метода
+// RED+
+// Отсутствует метод по получению всех сабтасков определенного эпика
 public class TaskManager {
     private HashMap<Long, Task> taskMap;
     private HashMap<Long, Epic> epicMap;
@@ -77,18 +77,33 @@ public class TaskManager {
         taskMap.clear();
     }
 
-    // RED
+    // RED+
     // Если мы удаляем эпики,
     // то мы обязаны удалить и все сабтаски,
     // ведь они не могут существовать без своих эпиков
     public void deleteEpics() {
+        for (Long epicId : epicMap.keySet()) {
+            Epic epic = epicMap.get(epicId);
+            if (epic != null) {
+                for (SubTask subTask : epic.getSubTasks()) {
+                    subTaskMap.remove(subTask.getId());
+                }
+            }
+        }
         epicMap.clear();
     }
 
-    // RED
+    // RED+
     // Необходимо обновить статус эпиков на NEW,
     // тк они теперь все без сабтасков
     public void deleteSubTasks() {
+        for (SubTask subTask : subTaskMap.values()){
+            Epic epic = epicMap.get(subTask.getEpicId());
+            if (epic != null) {
+                epic.getSubTasks().remove(subTask);
+                epic.updateStatus();
+            }
+        }
         subTaskMap.clear();
     }
 
@@ -98,6 +113,11 @@ public class TaskManager {
 
     public SubTask getSubTaskByID(long id) {
         return subTaskMap.get(id);
+    }
+
+    public ArrayList<SubTask> getSubTasksByEpicId(long epicId){
+        Epic epic = epicMap.get(epicId);
+        return new ArrayList<>(epic.getSubTasks());
     }
 
     // Yellow

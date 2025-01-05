@@ -1,11 +1,11 @@
-import managers.TaskManager;
-import modules.Epic;
-import modules.SubTask;
-import modules.Task;
+import manager.TaskManager;
+import module.Epic;
+import module.SubTask;
+import module.Task;
 
 import java.util.ArrayList;
 
-// YELLOW
+// YELLOW+
 // Мелочь, но папки(пакеты) принято называть в единственном числе
 // то есть manager, model и тд
 public class Main{

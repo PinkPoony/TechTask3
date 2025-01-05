@@ -1,4 +1,4 @@
-package modules;
+package module;
 
 import java.util.ArrayList;
 
@@ -23,7 +23,7 @@ public class Epic extends Task {
         boolean hasDone = false;
 
         for (SubTask subTask : subTasks) {
-            // YELLOW
+            // YELLOW+
             // Не очень хорошо, что у блока switch нет секции default
             switch (subTask.getStatus()) {
                 case "NEW":
@@ -35,6 +35,8 @@ public class Epic extends Task {
                 case "DONE":
                     hasDone = true;
                     break;
+                default:
+                    System.err.println("Неизвестный статус" + subTask.getStatus());
             }
         }
 
