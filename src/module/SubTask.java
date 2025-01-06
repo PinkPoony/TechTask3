@@ -1,9 +1,7 @@
 package module;
 
 public class SubTask extends Task {
-    // RED+
-    // Рушится инкапсуляция за счет отсутствия модификатора доступа
-     private long epicId;
+    private long epicId;
 
     public SubTask(String name, String description, String status, long epicId) {
         super(name, description, status);

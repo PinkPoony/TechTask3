@@ -7,27 +7,18 @@ import module.Task;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-// RED+
-// Отсутствует метод по получению всех сабтасков определенного эпика
 public class TaskManager {
     private HashMap<Long, Task> taskMap;
     private HashMap<Long, Epic> epicMap;
     private HashMap<Long, SubTask> subTaskMap;
     private long nextId = 1;
 
-    // GREEN!
-    // Очень здорово, что инициализация мап происходит в конструкторе
-    // Это позволяет сделать код более абстрактным и гибким,
-    // потому что если потребуется, мы сможем использовать другую реализацию мапы
-    // То есть использовать полиморфизм, об это будет подробно сказано позднее по курсу
     public TaskManager() {
         taskMap = new HashMap<>();
         epicMap = new HashMap<>();
         subTaskMap = new HashMap<>();
     }
 
-    // YELLOW
-    // Возвращать id созданного таски необязательно
     public long createTask(Task task) {
         task.setId(nextId);
         taskMap.put(nextId, task);
@@ -36,7 +27,7 @@ public class TaskManager {
     }
 
     // YELLOW
-    // Возвращать id созданного таски необязательно
+    // лучше возвращать примитив
     public Long createSubTask(SubTask sub) {
         long epicId = sub.getEpicId();
         if (!epicMap.containsKey(epicId)) {
@@ -52,8 +43,6 @@ public class TaskManager {
         return sub.getId();
     }
 
-    // YELLOW
-    // Возвращать id созданного таски необязательно
     public long createEpic(Epic epic) {
         epic.setId(nextId);
         epicMap.put(nextId, epic);
@@ -77,10 +66,9 @@ public class TaskManager {
         taskMap.clear();
     }
 
-    // RED+
-    // Если мы удаляем эпики,
-    // то мы обязаны удалить и все сабтаски,
-    // ведь они не могут существовать без своих эпиков
+    // YELLOW
+    // Можно просто очистить всю мапу сабтасков так же, как и эпиков
+    // subtaskMap.clear()
     public void deleteEpics() {
         for (Long epicId : epicMap.keySet()) {
             Epic epic = epicMap.get(epicId);
@@ -93,11 +81,12 @@ public class TaskManager {
         epicMap.clear();
     }
 
-    // RED+
-    // Необходимо обновить статус эпиков на NEW,
-    // тк они теперь все без сабтасков
+    // YELLOW
+    // Не очень оптимально получается
+    // много лишних действий, приходится от сабтаска получать эпик,
+    // хотя мы можем сразу в цикле пробежаться по всем эпикам и засетить им статус NEW
     public void deleteSubTasks() {
-        for (SubTask subTask : subTaskMap.values()){
+        for (SubTask subTask : subTaskMap.values()) {
             Epic epic = epicMap.get(subTask.getEpicId());
             if (epic != null) {
                 epic.getSubTasks().remove(subTask);
@@ -115,21 +104,15 @@ public class TaskManager {
         return subTaskMap.get(id);
     }
 
-    public ArrayList<SubTask> getSubTasksByEpicId(long epicId){
+    public ArrayList<SubTask> getSubTasksByEpicId(long epicId) {
         Epic epic = epicMap.get(epicId);
         return new ArrayList<>(epic.getSubTasks());
     }
-
-    // Yellow
-    // При удалении желательно проверять есть ли вообще такая задача в мапе
 
     public void deleteTaskByID(long id) {
         taskMap.remove(id);
     }
 
-    // GREEN!
-    // Круто, что не забыл удалять сабтаски,
-    // которые относятся к удаленному эпику
     public void deleteEpicByID(long id) {
         Epic epic = epicMap.remove(id);
         if (epic != null) {
@@ -154,7 +137,6 @@ public class TaskManager {
         taskMap.put(task.getId(), task);
     }
 
-
     public void updateEpic(Epic epic) {
         // RED
         // Необходимо сабтаски старого эпика оставлять
@@ -173,6 +155,5 @@ public class TaskManager {
         }
 
     }
-
 
 }
