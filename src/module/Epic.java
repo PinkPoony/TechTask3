@@ -3,6 +3,7 @@ package module;
 import java.util.ArrayList;
 
 public class Epic extends Task {
+    // На хеш-мапу
     private ArrayList<SubTask> subTasks = new ArrayList<>();
 
     public Epic(String name, String description) {
@@ -10,7 +11,15 @@ public class Epic extends Task {
     }
 
     public ArrayList<SubTask> getSubTasks() {
-        return subTasks;
+        return new ArrayList<>(subTasks);
+    }
+
+    public void removeSubtasks() {
+        subTasks.clear();
+    }
+
+    public void addSubTasks(ArrayList<SubTask> subTasks) {
+        this.subTasks.addAll(subTasks);
     }
 
     public void addSubTask(SubTask subTask) {
@@ -23,8 +32,6 @@ public class Epic extends Task {
         boolean hasDone = false;
 
         for (SubTask subTask : subTasks) {
-            // YELLOW+
-            // Не очень хорошо, что у блока switch нет секции default
             switch (subTask.getStatus()) {
                 case "NEW":
                     hasNew = true;

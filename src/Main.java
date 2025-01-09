@@ -46,6 +46,8 @@ public class Main{
         System.out.println(taskManager.getEpics());
         System.out.println(taskManager.getSubTasks());
 
+        epic.getSubTasks().clear();
+
 
     }
 }

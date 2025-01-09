@@ -26,8 +26,6 @@ public class TaskManager {
         return task.getId();
     }
 
-    // YELLOW
-    // лучше возвращать примитив
     public Long createSubTask(SubTask sub) {
         long epicId = sub.getEpicId();
         if (!epicMap.containsKey(epicId)) {
@@ -66,34 +64,16 @@ public class TaskManager {
         taskMap.clear();
     }
 
-    // YELLOW
-    // Можно просто очистить всю мапу сабтасков так же, как и эпиков
-    // subtaskMap.clear()
     public void deleteEpics() {
-        for (Long epicId : epicMap.keySet()) {
-            Epic epic = epicMap.get(epicId);
-            if (epic != null) {
-                for (SubTask subTask : epic.getSubTasks()) {
-                    subTaskMap.remove(subTask.getId());
-                }
-            }
-        }
         epicMap.clear();
+        subTaskMap.clear();
     }
 
-    // YELLOW
-    // Не очень оптимально получается
-    // много лишних действий, приходится от сабтаска получать эпик,
-    // хотя мы можем сразу в цикле пробежаться по всем эпикам и засетить им статус NEW
     public void deleteSubTasks() {
-        for (SubTask subTask : subTaskMap.values()) {
-            Epic epic = epicMap.get(subTask.getEpicId());
-            if (epic != null) {
-                epic.getSubTasks().remove(subTask);
-                epic.updateStatus();
-            }
-        }
         subTaskMap.clear();
+        for (Epic epic : epicMap.values()) {
+            epic.removeSubtasks();
+        }
     }
 
     public Task getTaskByID(long id) {
@@ -106,7 +86,7 @@ public class TaskManager {
 
     public ArrayList<SubTask> getSubTasksByEpicId(long epicId) {
         Epic epic = epicMap.get(epicId);
-        return new ArrayList<>(epic.getSubTasks());
+        return epic.getSubTasks();
     }
 
     public void deleteTaskByID(long id) {
@@ -138,10 +118,9 @@ public class TaskManager {
     }
 
     public void updateEpic(Epic epic) {
-        // RED
-        // Необходимо сабтаски старого эпика оставлять
-        // Здесь получается, что старые сабтаски теряются и ни к какому эпику не относятся после обновления
-        // Потому что при обновлении приходит эпик с пустым списком
+        Epic oldEpic = epicMap.get(epic.getId());
+        ArrayList<SubTask> subTasks = oldEpic.getSubTasks();
+        epic.addSubTasks(subTasks);
         epicMap.put(epic.getId(), epic);
     }
 
