@@ -1,29 +1,32 @@
 package module;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Epic extends Task {
     // На хеш-мапу
-    private ArrayList<SubTask> subTasks = new ArrayList<>();
+    private HashMap<Long, SubTask> subTasksMap = new HashMap<>();
 
     public Epic(String name, String description) {
         super(name, description, "NEW");
     }
 
-    public ArrayList<SubTask> getSubTasks() {
-        return new ArrayList<>(subTasks);
+    public HashMap<Long, SubTask> getSubTasks() {
+        return subTasksMap;
     }
 
     public void removeSubtasks() {
-        subTasks.clear();
+        subTasksMap.clear();
+        status = "NEW";
     }
 
-    public void addSubTasks(ArrayList<SubTask> subTasks) {
-        this.subTasks.addAll(subTasks);
+    public void addSubTasks(HashMap<Long, SubTask> subTasks) {
+        subTasksMap.putAll(subTasks);
+        updateStatus();
     }
 
     public void addSubTask(SubTask subTask) {
-        subTasks.add(subTask);
+        subTasksMap.put(subTask.getId(), subTask);
+        updateStatus();
     }
 
     public void updateStatus() {
@@ -31,7 +34,7 @@ public class Epic extends Task {
         boolean hasInProcess = false;
         boolean hasDone = false;
 
-        for (SubTask subTask : subTasks) {
+        for (SubTask subTask : subTasksMap.values()) {
             switch (subTask.getStatus()) {
                 case "NEW":
                     hasNew = true;

@@ -86,7 +86,7 @@ public class TaskManager {
 
     public ArrayList<SubTask> getSubTasksByEpicId(long epicId) {
         Epic epic = epicMap.get(epicId);
-        return epic.getSubTasks();
+        return new ArrayList<>(epic.getSubTasks().values());
     }
 
     public void deleteTaskByID(long id) {
@@ -96,7 +96,7 @@ public class TaskManager {
     public void deleteEpicByID(long id) {
         Epic epic = epicMap.remove(id);
         if (epic != null) {
-            for (SubTask subTask : epic.getSubTasks()) {
+            for (SubTask subTask : epic.getSubTasks().values()) {
                 subTaskMap.remove(subTask.getId());
             }
         }
@@ -119,7 +119,7 @@ public class TaskManager {
 
     public void updateEpic(Epic epic) {
         Epic oldEpic = epicMap.get(epic.getId());
-        ArrayList<SubTask> subTasks = oldEpic.getSubTasks();
+        HashMap<Long, SubTask> subTasks = oldEpic.getSubTasks();
         epic.addSubTasks(subTasks);
         epicMap.put(epic.getId(), epic);
     }
